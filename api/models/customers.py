@@ -18,6 +18,14 @@ customer_model = api.model('Customers', {
         required=True,
         description='The lastname of the customer'
     ),
+    'dob': fields.String(
+        required=True,
+        description='Data of birth of the customer'
+    ),
+    'gender': fields.String(
+        required=True,
+        description='Customer gender [M/F]'
+    ),
     'address': fields.String(
         required=True,
         description='The address of the customer'
@@ -26,9 +34,13 @@ customer_model = api.model('Customers', {
         required=True,
         description='The postcode of the customer'
     ),
-    'genre': fields.String(
+    'mobilePhone': fields.String(
         required=True,
-        description='Customer genre [M/F]'
+        description='Mobile number of the customer'
+    ),
+    'email': fields.String(
+        required=True,
+        description='Email contact'
     )
 })
 
@@ -36,15 +48,21 @@ customer_model = api.model('Customers', {
 class Customer(Document):
     first_name = StringField(required=True, max_length=50)
     last_name = StringField(required=True, max_length=50)
+    dob = StringField(required=True, max_length=50)
+    gender = StringField(required=True, max_length=50)
     address = StringField(required=True, max_length=120)
     postcode = StringField(required=True, max_length=50)
-    genre = StringField(required=True, max_length=50)
+    mobile_phone = StringField(required=True, max_length=50)
+    email = StringField(required=True, max_length=50)
 
     def to_json(self):
         return {
             'firstname': self.first_name,
             'lastname': self.last_name,
+            'dob': self.dob,
+            'gender': self.gender,
             'address': self.address,
             'postcode': self.postcode,
-            'genre': self.genre
+            'phone': self.mobile_phone,
+            'email': self.email
         }
