@@ -13,10 +13,6 @@ from mongoengine import (
 )
 
 membership_model = api.model('Memberships', {
-    'customerId': fields.String(
-        required=True,
-        description='Information about the customer: CustomerId'
-    ),
     'passMembership': fields.String(
         required=True,
         description='Type of the membership: Bronze:Silver:Gold'
@@ -38,17 +34,16 @@ membership_model = api.model('Memberships', {
 # MongoDB Membership
 class MembershipDocument(EmbeddedDocument):
     meta = {'collection': 'membership'}
-    customer_id = ObjectIdField(required=True, unique=True)
-    pass_membership = StringField(required=True, max_length=40)
+    passMembership = StringField(required=True, max_length=40)
     price = FloatField(required=True)
-    start_date = DateField(required=True)
-    end_date = DateField(required=True)
+    startDate = DateField(required=True)
+    endDate = DateField(required=True)
 
     def to_json(self):
-        return {
-            'customerId' : self.customer_id,
-            'passMembership' : self.pass_membership,
+        models = {
+            'passMembership' : self.passMembership,
             'price' : self.price,
-            'startDate' : self.start_date,
-            'endDate' : self.end_date
+            'startDate' : self.startDate,
+            'endDate' : self.endDate
         }
+        return json.dumps(models)
