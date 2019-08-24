@@ -68,6 +68,7 @@ class CustomerDocument(Document):
 
     def to_json(self):
         models = {
+            'id': str(self.id),
             'firstname': self.firstname,
             'lastname': self.lastname,
             'dob': self.dob,
