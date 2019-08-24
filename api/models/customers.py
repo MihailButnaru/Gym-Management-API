@@ -1,13 +1,22 @@
 # Copyright | 2019
 # All rights reserved
 # MIHAIL BUTNARU
+"""
+FlaskRest plus model and MongoDB Schema
+is provided in order to create, edit and delete customers.
+"""
 import json
 from flask_restplus import fields
-from api.routes import api
+from api.routes.restplus import api
+from api.models.membership import MembershipDocument
 from mongoengine import (
     Document,
-    StringField
+    StringField,
+    ListField,
+    EmbeddedDocumentField
 )
+
+ns = api.namespace('customers', description='Customer Management operations.')
 
 customer_model = api.model('Customers', {
     'firstname': fields.String(
@@ -34,7 +43,7 @@ customer_model = api.model('Customers', {
         required=True,
         description='The postcode of the customer'
     ),
-    'mobilePhone': fields.String(
+    'phoneNumber': fields.String(
         required=True,
         description='Mobile number of the customer'
     ),
@@ -44,25 +53,28 @@ customer_model = api.model('Customers', {
     )
 })
 
-# MongoDB Schema
-class Customer(Document):
-    first_name = StringField(required=True, max_length=50)
-    last_name = StringField(required=True, max_length=50)
-    dob = StringField(required=True, max_length=50)
-    gender = StringField(required=True, max_length=50)
+# MongoDB Customer
+class CustomerDocument(Document):
+    meta = {'collection': 'customers'}
+    firstname = StringField(required=True, max_length=15)
+    lastname = StringField(required=True, max_length=15)
+    dob = StringField(required=True, max_length=10)
+    gender = StringField(required=True, max_length=15)
     address = StringField(required=True, max_length=120)
-    postcode = StringField(required=True, max_length=50)
-    mobile_phone = StringField(required=True, max_length=50)
+    postcode = StringField(required=True, max_length=15)
+    phoneNumber = StringField(required=True, max_length=50)
     email = StringField(required=True, max_length=50)
+    membership = ListField(EmbeddedDocumentField(MembershipDocument))
 
     def to_json(self):
-        return {
-            'firstname': self.first_name,
-            'lastname': self.last_name,
+        models = {
+            'firstname': self.firstname,
+            'lastname': self.lastname,
             'dob': self.dob,
             'gender': self.gender,
             'address': self.address,
             'postcode': self.postcode,
-            'phone': self.mobile_phone,
+            'phoneNumber': self.phoneNumber,
             'email': self.email
         }
+        return json.dumps(models)
