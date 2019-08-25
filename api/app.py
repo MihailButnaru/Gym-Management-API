@@ -2,8 +2,9 @@
 # MIHAIL BUTNARU
 import logging
 from api.routes.restplus import api
-from api.resources.customers_resource import ns as customer_ns
 from flask import Flask, Blueprint
+from api.resources.customers_resource import ns as customer_ns
+from api.resources.membership_resource import ns as membership_ns
 
 
 def create_app(config):
@@ -23,5 +24,6 @@ def create_app(config):
     blueprint = Blueprint('api', __name__, url_prefix='/api/v1')
     api.init_app(blueprint)
     api.add_namespace(customer_ns)
+    api.add_namespace(membership_ns)
     app.register_blueprint(blueprint)
     return app
