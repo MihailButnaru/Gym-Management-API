@@ -1,6 +1,8 @@
 # Copyright | 2019 | All rights reserved
 # MIHAIL BUTNARU
 import json
+import datetime
+from bson.objectid import ObjectId
 from flask_restplus import fields
 from api.routes.restplus import api
 from mongoengine import (
@@ -8,9 +10,11 @@ from mongoengine import (
     ObjectIdField,
     StringField,
     FloatField,
-    DateField,
+    DateTimeField,
     EmbeddedDocument
 )
+
+ns = api.namespace('membership', description='Membership Management operation.')
 
 membership_model = api.model('Memberships', {
     'passMembership': fields.String(
@@ -21,11 +25,12 @@ membership_model = api.model('Memberships', {
         required=True,
         description='Membership Price according to the pass'
     ),
-    'startDate': fields.Date(
+    'startDate': fields.DateTime(
+        default=datetime.datetime.utcnow(),
         required=True,
         description='Date when the membership was started'
     ),
-    'endDate': fields.Date(
+    'endDate': fields.DateTime(
         required=True,
         description='Date when the membership was ended'
     )
@@ -34,16 +39,18 @@ membership_model = api.model('Memberships', {
 # MongoDB Membership
 class MembershipDocument(EmbeddedDocument):
     meta = {'collection': 'membership'}
+    _id = ObjectIdField(required=True, default=ObjectId)
     passMembership = StringField(required=True, max_length=40)
     price = FloatField(required=True)
-    startDate = DateField(required=True)
-    endDate = DateField(required=True)
+    startDate = DateTimeField(required=True)
+    endDate = DateTimeField(required=True)
 
     def to_json(self):
         models = {
+            '_id': str(self._id),
             'passMembership' : self.passMembership,
             'price' : self.price,
-            'startDate' : self.startDate,
-            'endDate' : self.endDate
+            'startDate' : self.startDate.isoformat(),
+            'endDate' : self.endDate.isoformat()
         }
         return json.dumps(models)
