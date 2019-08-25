@@ -13,6 +13,7 @@ from mongoengine import (
     DateTimeField,
     EmbeddedDocument
 )
+from api.utils.date_formatter import date_formatter
 
 ns = api.namespace('membership', description='Membership Management operation.')
 
@@ -50,7 +51,7 @@ class MembershipDocument(EmbeddedDocument):
             '_id': str(self._id),
             'passMembership' : self.passMembership,
             'price' : self.price,
-            'startDate' : self.startDate.isoformat(),
-            'endDate' : self.endDate.isoformat()
+            'startDate' : date_formatter(self.startDate),
+            'endDate' : date_formatter(self.endDate)
         }
         return json.dumps(models)
