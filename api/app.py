@@ -5,6 +5,7 @@ from api.routes.restplus import api
 from flask import Flask, Blueprint
 from api.resources.customers_resource import ns as customer_ns
 from api.resources.membership_resource import ns as membership_ns
+from api.resources.employee_resource import ns as employee_ns
 
 
 def create_app(config):
@@ -25,5 +26,6 @@ def create_app(config):
     api.init_app(blueprint)
     api.add_namespace(customer_ns)
     api.add_namespace(membership_ns)
+    api.add_namespace(employee_ns)
     app.register_blueprint(blueprint)
     return app

@@ -12,11 +12,11 @@ from api.models.membership import ns, membership_model, MembershipDocument
 
 @ns.route('/<customerId>')
 class MembershipList(Resource):
-    """ Shows a list of all memberships, lets you create a new membership"""
+    """ Shows a list of all memberships, lets you create a new membership """
     @ns.response(200, 'Success')
     @ns.response(500, 'Internal Server Error')
     def get(self, customerId):
-        """ List of all memberships, specific customer"""
+        """ List of all memberships, specific customer """
         memberships = []
         document = CustomerDocument.objects(id=customerId)
         if document:
@@ -91,6 +91,11 @@ class Membership(Resource):
                 for customer in customers:
                     for membership in customer.membership:
                         if str(membership._id) == membershipId:
-                            pass
+                            membership.passMembership = payload['passMembership']
+                            membership.price = payload['price']
+                            membership.startDate = payload['startDate']
+                            membership.endDate = payload['endDate']
+                            customer.save()
+                            return payload, 200
         except Exception as error:
             raise ValueError(error)
