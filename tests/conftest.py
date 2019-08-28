@@ -32,7 +32,7 @@ def app():
     app.response_class = Response
     app.test_client_class = APIClient
     app.testing = True
-
+    disconnect()    # Disconnets the previous connection with MongoDB
     connect('mockDB', host='mongomock://localhost')  # MongoDB mock connection
 
     return app
