@@ -32,3 +32,13 @@ def employee():
         'email' : 'asmith@hotmail.com'
     }
     return data
+
+
+@pytest.fixture
+def trainer():
+    data = {
+        'position' : 'Trainer',
+        'salary' : 40000,
+        'seniority' : 'Level 3'
+    }
+    return data

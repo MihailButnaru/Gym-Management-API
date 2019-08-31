@@ -5,7 +5,7 @@ Tests ensure endpoints implementation is working as expected, it
 will return the correct response code and response data based
 on the parameters provided.
 """
-from tests.mock_data import customer, employee
+from tests.mock_data import customer, employee, trainer
 
 ############################ => CUSTOMERS TESTS <= #############################
 
@@ -147,3 +147,60 @@ def test_delete_employee(client, employee):
 
     assert employee_details.status_code == 200
 
+
+############################ => TRAINER TESTS <= #############################
+
+def test_get_trainers(client):
+    """
+    Test ensures that the trainer endpoint is working
+    and the status must return the correct code
+    """
+    response = client.get('api/v1/trainers')
+    assert response.status_code == 200
+
+
+def test_post_trainer(client, trainer):
+    """
+    Test ensures that creating a new trainer
+    is successful and the data is stored in mongo database
+    """
+    response = client.post('api/v1/trainers', json=trainer)
+    assert response.status_code == 201
+    assert response.json['position'] == trainer['position']
+
+
+def test_get_trainer(client, trainer):
+    """
+    Test ensures that getting a specific trainer based on the ID
+    is sucessful
+    """
+    response = client.post('api/v1/trainers', json=trainer)
+
+    trainer_details = client.get('api/v1/trainers/{}'.format(response.json['id']))
+
+    assert trainer_details.status_code == 200
+    assert trainer_details.json[0]['position'] == trainer['position']
+
+def test_delete_trainer(client, trainer):
+    """
+    Test ensures that a trainer with specific id is deleted
+    """
+    response = client.post('api/v1/trainers', json=trainer)
+
+    trainer_details = client.delete('api/v1/trainers/{}'.format(response.json['id']))
+
+    assert trainer_details.status_code == 200
+
+
+def test_edit_trainer(client, trainer):
+    """
+    Test ensures trainers details are edited based on the id
+    """
+    response = client.post('api/v1/trainers', json=trainer)
+
+    trainer['posiiton'] = 'New Position'
+
+    trainer_details = client.put('api/v1/trainers/{}'.format(response.json['id']),
+            json=trainer)
+
+    assert trainer_details.status_code == 200
