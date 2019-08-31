@@ -27,7 +27,7 @@ class EmployeeList(Resource):
         try:
             payload = request.get_json(force=True)
             employee = EmployeeDocument(**payload).save()
-            return json.loads(employee.to_json()), 200
+            return json.loads(employee.to_json()), 201
         except Exception as error:
             return {'message': error}
 
