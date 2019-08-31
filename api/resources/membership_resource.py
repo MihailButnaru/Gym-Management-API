@@ -7,10 +7,10 @@ that is linked to a specific customer.
 import json
 from flask import request
 from flask_restplus import Resource
-from api.models.customers import CustomerDocument
-from api.models.membership import ns, membership_model, MembershipDocument
+from api.models.customers import ns, CustomerDocument
+from api.models.membership import membership_model, MembershipDocument
 
-@ns.route('/<customerId>')
+@ns.route('/<customerId>/membership')
 class MembershipList(Resource):
     """ Shows a list of all memberships, lets you create a new membership """
     @ns.response(200, 'Success')
@@ -48,7 +48,7 @@ class MembershipList(Resource):
         except Exception as error:
             raise ValueError(error)
 
-@ns.route('/<customerId>/pass/<membershipId>')
+@ns.route('/<customerId>/membership/pass/<membershipId>')
 class Membership(Resource):
     """ Allows to edit, delete a membership """
     
