@@ -42,3 +42,13 @@ def trainer():
         'seniority' : 'Level 3'
     }
     return data
+
+
+@pytest.fixture
+def gym_class():
+    data = {
+        'className' : 'Running',
+        'classTime' : '03/09/19 12:00',
+        'naxAvailable' : '50'
+    }
+    return data
