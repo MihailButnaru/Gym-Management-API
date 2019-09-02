@@ -3,10 +3,13 @@
 import json
 from flask_restplus import fields
 from api.routes.restplus import api
+from api.models.gym_classes import GymClassDocument
 from mongoengine import (
     Document,
     StringField,
-    FloatField
+    FloatField,
+    ListField,
+    EmbeddedDocumentField
 )
 
 ns = api.namespace('trainers', description='Trainers Management operation.')
@@ -32,6 +35,8 @@ class TrainerDocument(Document):
     position = StringField(required=True, max_length=25)
     salary = FloatField(required=True)
     seniority = StringField(required=True, max_length=25)
+    gymclass = ListField(EmbeddedDocumentField(GymClassDocument))
+
 
     def to_json(self):
         models = {

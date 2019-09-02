@@ -6,6 +6,8 @@ from flask import Flask, Blueprint
 from api.resources.customers_resource import ns as customer_ns
 from api.resources.employee_resource import ns as employee_ns
 from api.resources.trainers_resource import ns as trainer_ns
+from api.resources.membership_resource import ns as membership_ns
+from api.resources.gym_classes_resource import ns as gym_class_ns
 
 
 def create_app(config):
@@ -27,5 +29,7 @@ def create_app(config):
     api.add_namespace(customer_ns)
     api.add_namespace(employee_ns)
     api.add_namespace(trainer_ns)
+    api.add_namespace(membership_ns)
+    api.add_namespace(gym_class_ns)
     app.register_blueprint(blueprint)
     return app

@@ -8,6 +8,7 @@ from mongoengine import (
     Document,
     StringField,
     ListField,
+    ObjectIdField,
     EmbeddedDocumentField
 )
 
@@ -45,6 +46,10 @@ employee_model = api.model('Employees', {
     'email': fields.String(
         required=True,
         description='Email contact'
+    ),
+    'trainerId' : fields.String(
+        required=False,
+        description='Trainer ID'
     )
 })
 
@@ -59,6 +64,7 @@ class EmployeeDocument(Document):
     postcode = StringField(required=True, max_length=15)
     phoneNumber = StringField(required=True, max_length=50)
     email = StringField(required=True, max_length=50)
+    trainerId = ObjectIdField(required=False)
 
     def to_json(self):
         models = {
@@ -70,6 +76,7 @@ class EmployeeDocument(Document):
             'address': self.address,
             'postcode': self.postcode,
             'phoneNumber': self.phoneNumber,
-            'email': self.email
+            'email': self.email,
+            'trainerId' : self.trainerId
         }
         return json.dumps(models)
